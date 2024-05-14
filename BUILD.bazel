@@ -1,0 +1,36 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@pip//:requirements.bzl", "requirement")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+load("@aspect_rules_lint//format:defs.bzl", "format_multirun")
+
+format_multirun(
+    name = "format",
+    python = requirement("ruff"),
+)
+
+compile_pip_requirements(
+  name = "requirements",
+  src = "requirements.in",
+  extra_args = ["--resolver=backtracking"],
+  requirements_txt = "requirements.txt",
+)
+
+alias(
+  name = "mypy",
+  actual = requirement("mypy"),
+  visibility = ["//visibility:public"],
+)
+
+exports_files([
+  "mypy.ini",
+  "requirement.txt",
+])
+
+py_binary(
+  name = "main",
+  srcs = ["main.py"],
+  deps = [
+    requirement("aiohttp"),
+    "//lib"
+  ],
+)
