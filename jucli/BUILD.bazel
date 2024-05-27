@@ -1,0 +1,26 @@
+load("@pip//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_python//python:pip.bzl", "compile_pip_requirements")
+
+compile_pip_requirements(
+    name = "requirements",
+    src = "requirements.in",
+    extra_args = ["--resolver=backtracking"],
+    requirements_txt = "requirements.txt",
+)
+
+exports_files([
+    "requirements.txt",
+    "requirements.in",
+])
+
+py_binary(
+    name = "main",
+    srcs = ["main.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jucli/cli",
+        "//jucli/lib",
+        requirement("rich"),
+    ],
+)

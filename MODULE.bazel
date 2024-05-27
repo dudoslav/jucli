@@ -1,6 +1,6 @@
 module(
-  name = "jucli",
-  version = "0.0.0",
+    name = "jucli",
+    version = "0.0.0",
 )
 
 bazel_dep(name = "rules_python", version = "0.31.0")
@@ -8,23 +8,28 @@ bazel_dep(name = "mypy_integration", version = "0.0.0")
 bazel_dep(name = "aspect_rules_lint", version = "0.21.0")
 
 git_override(
-  module_name = "mypy_integration",
-  commit = "728238924f690ca22ef21008aa6d18ae9beacc0b",
-  remote = "https://github.com/bazel-contrib/bazel-mypy-integration.git",
+    module_name = "mypy_integration",
+    commit = "728238924f690ca22ef21008aa6d18ae9beacc0b",
+    remote = "https://github.com/bazel-contrib/bazel-mypy-integration.git",
 )
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
-  python_version = "3.12",
+    python_version = "3.12",
 )
 
 pip = use_extension(
-  "@rules_python//python/extensions:pip.bzl",
-  "pip",
+    "@rules_python//python/extensions:pip.bzl",
+    "pip",
 )
 pip.parse(
     hub_name = "pip",
     python_version = "3.12",
-    requirements_lock = "//:requirements.txt",
+    requirements_lock = "//jucli:requirements.txt",
 )
-use_repo(pip, "pip")
+pip.parse(
+    hub_name = "mypy_pip",
+    python_version = "3.12",
+    requirements_lock = "//tools/typing:requirements.txt",
+)
+use_repo(pip, "mypy_pip", "pip")

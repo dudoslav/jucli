@@ -1,0 +1,13 @@
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "cli",
+    srcs = [
+        "cli.py",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//jucli/lib",
+        requirement("rich-click"),
+    ],
+)

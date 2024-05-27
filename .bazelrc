@@ -1,4 +1,4 @@
-build --@mypy_integration//:mypy_config=//:mypy.ini
-build --@mypy_integration//:mypy=//:mypy
+build --@mypy_integration//:mypy_config=//tools/typing:mypy.ini
+build --@mypy_integration//:mypy=//tools/typing:mypy
 build --aspects @mypy_integration//:mypy.bzl%mypy_aspect
 build --output_groups=+mypy
