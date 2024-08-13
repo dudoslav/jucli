@@ -1,30 +1,53 @@
-import argparse
+from pathlib import Path
+import rich_click as click
+from rich import print
 import logging
+import jucli.cli.utils as utils
+import aiohttp
 
-from jucli.lib.options import Options
 
+@click.group()
+def cli():
+    pass
 
-def parse() -> Options:
-    parser = argparse.ArgumentParser(description='JuCLI')
+@cli.group()
+def hub():
+    pass
 
-    parser.add_argument(
-        'commands',
-        metavar='command',
-        type=str,
-        nargs='+',
-        help='command/commands'
-    )
+@cli.command()
+@utils.option_verbose
+@utils.option_jupyterhub_endpoint
+@utils.option_token
+@utils.async_command
+async def info(verbose: bool, endpoint: str, token: str):
+    logging.debug("Command 'info' invoked")
 
-    parser.add_argument(
-        '-v',
-        '--verbose',
-        action='store_true',
-        help='Set logging to verbose'
-    )
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+                f"{endpoint}/info",
+                headers={ "Authorization": f"token {token}" }) as response:
+            print(response)
 
-    args = parser.parse_args()
+@hub.command()
+@utils.option_verbose
+@utils.option_jupyterhub_endpoint
+@utils.option_token
+@utils.async_command
+async def version(verbose: bool, endpoint: str, token: str):
+    logging.debug("Command 'version' invoked")
 
-    return Options(
-        log_level=logging.DEBUG if args.verbose else logging.INFO,
-        commands=args.commands
-    )
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+                f"{endpoint}/version",
+                headers={ "Authorization": f"token {token}" }) as response:
+            print(response)
+
+@cli.command()
+@utils.option_verbose
+@utils.option_jupyterhub_endpoint
+@utils.option_token
+@utils.async_command
+async def test(verbose: bool, endpoint: str, token, str):
+    logging.debug("Command 'test' invoked")
+
+    notebooks = Path(".").rglob("*.ipynb")

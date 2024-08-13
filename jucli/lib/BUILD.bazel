@@ -4,9 +4,11 @@ load("@rules_python//python:defs.bzl", "py_library")
 py_library(
     name = "lib",
     srcs = [
-        "jupyterhub.py",
-        "jupyterserver.py",
-        "options.py",
+        "__init__.py",
+        "hub.py",
+        "kernel.py",
+        "kernel_connection.py",
+        "server.py",
     ],
     visibility = ["//visibility:public"],
     deps = [
