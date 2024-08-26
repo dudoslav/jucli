@@ -10,5 +10,8 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         requirement("rich-click"),
+        requirement("aiohttp"),
+        requirement("rich"),
+        "//jucli/lib",
     ],
 )

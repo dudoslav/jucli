@@ -20,6 +20,5 @@ py_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//jucli/cli",
-        requirement("rich"),
     ],
 )

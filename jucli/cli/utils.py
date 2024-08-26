@@ -42,6 +42,17 @@ def option_verbose(fn: Callable) -> Callable:
         callback=callback,
     )(fn)
 
+option_jupyterhub_user_id = click.option(
+    "--user-id",
+    envvar="JUCLI_JUPYTERHUB_USER_ID",
+    help="JupyterHub API user ID",
+)
+
+option_jupyterhub_data = click.option(
+    "--data",
+    envvar="JUCLI_JUPYTERHUB_DATA",
+    help="JupyterHub API request payload",
+)
 
 option_jupyterhub_endpoint = click.option(
     "-e",
@@ -64,4 +75,9 @@ option_token = click.option(
     "--token",
     envvar="JUCLI_TOKEN",
     help="JupyterHub/Server token",
+)
+
+argument_path = click.argument(
+    "path",
+    type=click.Path(exists=True)
 )
